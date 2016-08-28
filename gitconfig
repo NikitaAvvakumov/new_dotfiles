@@ -1,0 +1,27 @@
+# set your user tokens as environment variables, such as ~/.secrets
+# See the README for examples.
+[color]
+  ui = true
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red
+  new = green
+[format]
+  pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
+[core]
+  editor = nvim
+  excludesfile = ~/dotfiles/gitignore
+[advice]
+  statusHints = false
+[include]
+  path = .gitconfig.user
+[user]
+	name = Nikita Avvakumov
+	email = nikitaavvakumov@gmail.com
+[init]
+	templatedir = ~/.git_template
