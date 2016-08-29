@@ -64,9 +64,9 @@ set list listchars=tab:\ \ ,trail:·
 " set softtabstop=2
 " set tabstop=2
 " set JS, liquid & HTML indent to 4 spaces
-" au Filetype javascript setlocal shiftwidth=4 tabstop=4 sts=0
-" au Filetype html setlocal shiftwidth=4 tabstop=4 sts=0
-" au BufRead,BufNewFile *.liquid setlocal shiftwidth=4 tabstop=4 sts=0
+" au Filetype javascript setlocal shiftwidth=4 softtabstop=4
+au Filetype html setlocal shiftwidth=4 softtabstop=4
+au BufRead,BufNewFile *.liquid setlocal shiftwidth=4 softtabstop=4
 
 " Wrap the quickfix window
 au FileType qf setlocal wrap linebreak
@@ -76,9 +76,6 @@ au BufRead,BufNewFile *.md setlocal textwidth=80
 
 set splitbelow
 set splitright
-
-" Jump to last known cursor position when opening a file
-" au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions by storing it in a file
@@ -163,6 +160,7 @@ map <Leader>a :call RunAllSpecs()<CR>
 autocmd! BufReadPost,BufWritePost * Neomake
 let g:neomake_css_enabled_makers = ['csslint']
 let g:neomake_elixir_enabled_makers = ['credo']
+let g:neomake_html_enabled_makers = ['htmlhint']
 let g:neomake_javascript_enabled_makers = ['jshint']
 let g:neomake_json_enabled_makers = ['jsonlint']
 let g:neomake_markdown_enabled_makers = ['markdownlint']
