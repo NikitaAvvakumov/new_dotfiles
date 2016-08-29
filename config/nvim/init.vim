@@ -5,7 +5,15 @@ Plug 'bling/vim-airline'
 Plug 'morhetz/gruvbox'
 
 " Syntax, completion & linting
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'elixir-lang/vim-elixir'
+Plug 'elzr/vim-json'
+Plug 'leafgarland/typescript-vim'
 Plug 'neomake/neomake'
+Plug 'othree/html5.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'tpope/vim-markdown'
+Plug 'vim-ruby/vim-ruby'
 
 " Improvements
 Plug 'ctrlpvim/ctrlp.vim'
@@ -18,19 +26,12 @@ Plug 'tpope/vim-surround'
 
 " Code
 Plug 'airblade/vim-gitgutter'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'elixir-lang/vim-elixir'
-Plug 'elzr/vim-json'
 Plug 'jiangmiao/auto-pairs'
 Plug 'lilydjwg/colorizer', { 'for': ['css', 'sass', 'scss', 'less', 'html', 'xdefaults', 'javascript', 'javascript.jsx'] }
-Plug 'othree/html5.vim'
-Plug 'pangloss/vim-javascript'
 Plug 'thoughtbot/vim-rspec'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
-Plug 'tpope/vim-markdown'
-Plug 'vim-ruby/vim-ruby'
 
 call plug#end()
 
@@ -170,6 +171,7 @@ let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
 let g:neomake_scss_enabled_makers = ['sass-lint']
 let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_sql_enabled_makers = ['sqlint']
+let g:neomake_typescript_enabled_makers = ['tsc']
 let g:neomake_yaml_enabled_makers = ['yamllint']
 
 " ================ vim-airline =====================
