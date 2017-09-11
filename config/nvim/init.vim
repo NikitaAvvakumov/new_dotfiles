@@ -6,22 +6,21 @@ Plug 'morhetz/gruvbox'
 
 " Syntax, completion & linting
 Plug 'cakebaker/scss-syntax.vim'
+Plug 'davidhalter/jedi-vim'
 Plug 'elixir-lang/vim-elixir'
-Plug 'elzr/vim-json'
-Plug 'leafgarland/typescript-vim'
+Plug 'mxw/vim-jsx'
 Plug 'neomake/neomake'
-Plug 'othree/html5.vim'
 Plug 'pangloss/vim-javascript'
-Plug 'tpope/vim-markdown'
-Plug 'vim-ruby/vim-ruby'
+Plug 'sheerun/vim-polyglot'
+Plug 'slashmili/alchemist.vim'
+Plug 'tpope/vim-rails'
 
 " Improvements
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dietsche/vim-lastplace'
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 
 " Code
@@ -31,7 +30,6 @@ Plug 'lilydjwg/colorizer', { 'for': ['css', 'sass', 'scss', 'less', 'html', 'xde
 Plug 'thoughtbot/vim-rspec'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-git'
 
 call plug#end()
 
@@ -54,19 +52,16 @@ let mapleader=','
 set nowrap
 set colorcolumn=80
 set expandtab
+set cursorline
+set cursorcolumn
 "
 " Display tabs and trailing spaces visually
 set list listchars=tab:\ \ ,trail:·
 
-" All of the below should be covered by tpope/vim-sleuth
-" set smartindent
-" set shiftwidth=2
-" set softtabstop=2
-" set tabstop=2
-" set JS, liquid & HTML indent to 4 spaces
-" au Filetype javascript setlocal shiftwidth=4 softtabstop=4
-au Filetype html setlocal shiftwidth=4 softtabstop=4
-au BufRead,BufNewFile *.liquid setlocal shiftwidth=4 softtabstop=4
+set smartindent
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
 
 " Wrap the quickfix window
 au FileType qf setlocal wrap linebreak
@@ -76,6 +71,10 @@ au BufRead,BufNewFile *.md setlocal textwidth=80
 
 set splitbelow
 set splitright
+
+" Search
+set ignorecase "ignore case when searching
+set smartcase  "unless search string includes uppercase letter
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions by storing it in a file
@@ -156,17 +155,20 @@ map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
 
+" ================== CtrlP =========================
+let g:ctrlp_max_depth = 30
+let g:ctrlp_max_files=0
 " ================== Neomake =========================
 autocmd! BufReadPost,BufWritePost * Neomake
 let g:neomake_css_enabled_makers = ['csslint']
-let g:neomake_elixir_enabled_makers = ['credo']
+let g:neomake_elixir_enabled_makers = ['mix']
 let g:neomake_html_enabled_makers = ['htmlhint']
 let g:neomake_javascript_enabled_makers = ['jshint']
 let g:neomake_json_enabled_makers = ['jsonlint']
 let g:neomake_markdown_enabled_makers = ['markdownlint']
 let g:neomake_python_enabled_makers = ['pylint']
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-let g:neomake_scss_enabled_makers = ['sass-lint']
+let g:neomake_scss_enabled_makers = ['sasslint']
 let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_sql_enabled_makers = ['sqlint']
 let g:neomake_typescript_enabled_makers = ['tsc']
@@ -179,8 +181,16 @@ let g:airline#extensions#tabline#tab_nr_type = 2
 
 " ================ deoplete ========================
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
 let g:deoplete#max_list = 10
 let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['buffer', 'tag']
+let g:deoplete#sources._ = ['buffer', 'tag', 'around']
 " enable tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" ================ alchemist ========================
+let g:alchemist_iex_term_split = 'vsplit'
+let g:alchemist_iex_term_size = 100
+
+" ================ vim-jedi ========================
+let g:jedi#force_py_version = 3

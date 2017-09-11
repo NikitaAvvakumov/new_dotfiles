@@ -71,7 +71,7 @@ alias gdc='git ls-files --cached'
 alias gdx='git ls-files --deleted'
 alias gdm='git ls-files --modified'
 alias gdu='git ls-files --other --exclude-standard'
-alias gdk='git ls-files --killed'
+# alias gdk='git ls-files --killed'
 alias gdi='git status --porcelain --short --ignored | sed -n "s/^!! //p"'
 
 # Fetch (f)
