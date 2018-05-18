@@ -1,22 +1,23 @@
 call plug#begin('~/.vim/plugged')
 
 " Appearance
-Plug 'bling/vim-airline'
 Plug 'morhetz/gruvbox'
 
 " Syntax, completion & linting
 Plug 'cakebaker/scss-syntax.vim'
 Plug 'davidhalter/jedi-vim'
-Plug 'elixir-lang/vim-elixir'
+Plug 'elixir-editors/vim-elixir'
+Plug 'mattn/emmet-vim'
 Plug 'mxw/vim-jsx'
-Plug 'neomake/neomake'
 Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot'
 Plug 'slashmili/alchemist.vim'
 Plug 'tpope/vim-rails'
+Plug 'w0rp/ale'
 
 " Improvements
-Plug 'ctrlpvim/ctrlp.vim'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'dietsche/vim-lastplace'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'tomtom/tcomment_vim'
@@ -27,7 +28,7 @@ Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'lilydjwg/colorizer', { 'for': ['css', 'sass', 'scss', 'less', 'html', 'xdefaults', 'javascript', 'javascript.jsx'] }
-Plug 'thoughtbot/vim-rspec'
+Plug 'janko-m/vim-test'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
 
@@ -54,6 +55,7 @@ set colorcolumn=80
 set expandtab
 set cursorline
 set cursorcolumn
+set formatoptions+=j            "improved line joins with 'J'
 "
 " Display tabs and trailing spaces visually
 set list listchars=tab:\ \ ,trail:·
@@ -75,6 +77,7 @@ set splitright
 " Search
 set ignorecase "ignore case when searching
 set smartcase  "unless search string includes uppercase letter
+set inccommand=nosplit "substitution preview in place
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions by storing it in a file
@@ -98,9 +101,16 @@ set complete+=kspell
 
 " ================ Scrolling ========================
 
-set scrolloff=8         "Start scrolling when we're 8 lines away from margins
+set scrolloff=8         "Start scrolling when 8 lines away from margins
 set sidescrolloff=15
 set sidescroll=1
+
+" ==================== Errors ==========================
+
+" Highlight trailing whitespaces
+match ErrorMsg '\s\+$'
+" Highlight characters past line length of 120
+match ErrorMsg '\%>120v.\+'
 
 " ================ Key mappings ========================
 " Move between splits easier
@@ -114,12 +124,12 @@ nnoremap <silent> <BS> <C-W><C-H>
 nnoremap 0 ^
 nnoremap ^ 0
 
-map <Leader>p :CtrlP<CR>
+map <Leader>p :Files<CR>
 " Use Ctrl-n to remove highlighting of search results
 map <C-n> :nohl<CR>
 
 " vim-surround mappings:
-" ,# Surround a word with #{ruby interpolation}
+" ,# Surround a word with #{ruby/elixir interpolation}
 map ,# ysiw#
 
 " ," Surround a word with "double quotes"
@@ -147,37 +157,46 @@ map ,` ysiw`
 nmap [<Space> O<Esc>
 nmap ]<Space> o<Esc>
 
-" vim-rspec
-let g:rspec_runner = 'os_x_iterm'
-let g:rspec_command = "Dispatch rspec {spec}"
-map <Leader>t :call RunCurrentSpecFile()<CR>
-map <Leader>s :call RunNearestSpec()<CR>
-map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
+" search from selection in Normal mode
+vnoremap // y/<C-R>"<CR>
 
-" ================== CtrlP =========================
-let g:ctrlp_max_depth = 30
-let g:ctrlp_max_files=0
-" ================== Neomake =========================
-autocmd! BufReadPost,BufWritePost * Neomake
-let g:neomake_css_enabled_makers = ['csslint']
-let g:neomake_elixir_enabled_makers = ['mix']
-let g:neomake_html_enabled_makers = ['htmlhint']
-let g:neomake_javascript_enabled_makers = ['jshint']
-let g:neomake_json_enabled_makers = ['jsonlint']
-let g:neomake_markdown_enabled_makers = ['markdownlint']
-let g:neomake_python_enabled_makers = ['pylint']
-let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-let g:neomake_scss_enabled_makers = ['sasslint']
-let g:neomake_sh_enabled_makers = ['sh']
-let g:neomake_sql_enabled_makers = ['sqlint']
-let g:neomake_typescript_enabled_makers = ['tsc']
-let g:neomake_yaml_enabled_makers = ['yamllint']
+" vim-test
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>a :TestSuite<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
 
-" ================ vim-airline =====================
-set laststatus=2
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#tab_nr_type = 2
+let test#strategy = "neovim"
+
+function! ElixirUmbrellaTransform(cmd) abort
+  if match(a:cmd, 'apps/') != -1
+    return substitute(a:cmd, 'mix test apps/\([^/]*/\)', 'cd apps/\1 \&\& mix test ', '')
+  else
+    return a:cmd
+  endif
+endfunction
+
+let g:test#preserve_screen = 0
+let g:test#custom_transformations = {'elixir_umbrella': function('ElixirUmbrellaTransform')}
+let g:test#transformation = 'elixir_umbrella'
+
+" ==================== ale =========================
+let g:ale_linters = {
+  \ 'javascript': ['eslint', 'flow'],
+  \ 'elixir': ['credo', 'dogma'],
+\}
+highlight clear ALEErrorSign " otherwise uses error bg color (typically red)
+highlight clear ALEWarningSign " otherwise uses error bg color (typically red)
+let g:ale_sign_error = '✒︎' " could use emoji
+let g:ale_sign_warning = '✑' " could use emoji
+let g:ale_statusline_format = ['X %d', '? %d', '']
+" %linter% is the name of the linter that provided the message
+" %s is the error or warning message
+let g:ale_echo_msg_format = '%linter%: %s'
+" Map keys to navigate between lines with errors and warnings.
+nnoremap <leader>an :ALENextWrap<cr>
+nnoremap <leader>ap :ALEPreviousWrap<cr>
 
 " ================ deoplete ========================
 let g:deoplete#enable_at_startup = 1
