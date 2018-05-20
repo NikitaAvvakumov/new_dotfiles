@@ -23,5 +23,8 @@
 [user]
 	name = Nikita Avvakumov
 	email = nikitaavvakumov@gmail.com
+	signingkey = 3214257F4B9E0731
 [init]
 	templatedir = ~/.git_template
+[commit]
+	gpgsign = true
