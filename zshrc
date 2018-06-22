@@ -60,6 +60,8 @@ ZSH_THEME="minu"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -121,7 +123,7 @@ alias imix="iex -S mix"
 alias mcc="mix clean && mix compile"
 alias mmigrate="mix ecto.migrate && mix ecto.rollback --step 1 && mix ecto.migrate"
 alias mpr="mix phx.routes"
-alias mps="export EMAIL_DELIVERY_ENABLED=true && mix phx.server"
+alias mps="export EMAIL_DELIVERY_ENABLED=true && iex -S mix phx.server"
 alias heroku_iex="heroku run 'POOL_SIZE=2 iex -S mix'"
 alias heroku_mix_migrate="heroku run 'POOL_SIZE=2 mix ecto.migrate'"
 
