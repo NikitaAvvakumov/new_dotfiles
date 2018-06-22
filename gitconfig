@@ -16,6 +16,7 @@
 [core]
   editor = nvim
   excludesfile = ~/dotfiles/gitignore
+	pager = less -FRXK
 [advice]
   statusHints = false
 [include]
