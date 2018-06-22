@@ -79,6 +79,18 @@ set ignorecase "ignore case when searching
 set smartcase  "unless search string includes uppercase letter
 set inccommand=nosplit "substitution preview in place
 
+" `Find` command to use ripgrep to search in files
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --ignore-case: Case insensitive search
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+
 " ================ Persistent Undo ==================
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
