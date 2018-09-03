@@ -4,26 +4,33 @@
   ui = true
 [color "branch"]
   current = yellow reverse
-  local = yellow
-  remote = green
+  local   = yellow
+  remote  = green
 [color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red
-  new = green
+  commit     = yellow bold
+  frag       = magenta bold
+  meta       = yellow
+  new        = green bold
+  old        = red bold
+  whitespace = red reverse
+[color "diff-highlight"]
+  newHighlight = green bold 22
+  newNormal    = green bold
+  oldHighlight = red bold 52
+  oldNormal    = red bold
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [core]
-  editor = nvim
+  editor       = nvim
   excludesfile = ~/dotfiles/gitignore
-	pager = less -FRXK
+  pager        = diff-so-fancy | less --tabs=4 -RFX
 [advice]
   statusHints = false
 [include]
   path = .gitconfig.user
 [user]
-	name = Nikita Avvakumov
-	email = nikitaavvakumov@gmail.com
+	name       = Nikita Avvakumov
+	email      = nikitaavvakumov@gmail.com
 	signingkey = 3214257F4B9E0731
 # [init]
 # 	templatedir = ~/.git_template
