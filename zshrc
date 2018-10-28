@@ -66,6 +66,10 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# Start asdf version manager
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
 # User configuration
 export ERL_AFLAGS="-kernel shell_history enabled"
 
@@ -124,10 +128,15 @@ alias mcc="mix clean && mix compile"
 alias mmigrate="mix ecto.migrate && mix ecto.rollback --step 1 && mix ecto.migrate"
 alias mpr="mix phx.routes"
 alias mps="export EMAIL_DELIVERY_ENABLED=true && iex -S mix phx.server"
-alias heroku_iex="heroku run 'POOL_SIZE=2 iex -S mix'"
-alias heroku_mix_migrate="heroku run 'POOL_SIZE=2 mix ecto.migrate'"
+alias heroku_iex="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 iex -S mix'"
+alias heroku_mix_migrate="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 mix ecto.migrate'"
 
 alias vim=nvim
+alias vzf='nvim $(fzf)'
+alias cat=bat
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+alias top=htop
+alias gst_vim='vim -O $(gst -s | cut -c4-)'
 
 function mcd() {
   mkdir -p $1
@@ -154,3 +163,6 @@ export PATH="$PATH:$HOME/.rvm/bin"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
