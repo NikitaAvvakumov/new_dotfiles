@@ -1,7 +1,8 @@
 call plug#begin('~/.vim/plugged')
 
 " Appearance
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim'
 
 " Syntax, completion & linting
 Plug 'cakebaker/scss-syntax.vim'
@@ -16,10 +17,12 @@ Plug 'tpope/vim-rails'
 Plug 'w0rp/ale'
 
 " Improvements
+" Plug 'kassio/neoterm'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'dietsche/vim-lastplace'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-surround'
@@ -35,7 +38,9 @@ Plug 'tpope/vim-fugitive'
 call plug#end()
 
 " ================== Appearance ======================
-colorscheme gruvbox
+" colorscheme gruvbox
+set termguicolors
+colorscheme nord
 set background=dark
 set guifont=Ubuntu\ Mono:h16
 highlight LineNr ctermbg=black
@@ -51,7 +56,7 @@ set visualbell                  "No sounds
 let mapleader=','
 
 set nowrap
-set colorcolumn=80
+set colorcolumn=100
 set expandtab
 set cursorline
 set cursorcolumn
@@ -196,9 +201,17 @@ let g:test#transformation = 'elixir_umbrella'
 " ==================== ale =========================
 let g:ale_linters = {
   \ 'javascript': ['eslint', 'flow'],
-  \ 'elixir': ['credo', 'dogma', 'mix'],
+  \ 'elixir': ['elixir', 'elixir-ls'],
   \ 'ruby': ['rubocop', 'ruby']
 \}
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
+\   'ruby': ['rubocop'],
+\   'elixir': ['mix_format']
+\}
+let g:ale_fix_on_save = 1
+
 highlight clear ALEErrorSign " otherwise uses error bg color (typically red)
 highlight clear ALEWarningSign " otherwise uses error bg color (typically red)
 let g:ale_sign_error = '>>' " could use emoji
@@ -207,18 +220,32 @@ let g:ale_statusline_format = ['X %d', '? %d', '']
 " %linter% is the name of the linter that provided the message
 " %s is the error or warning message
 let g:ale_echo_msg_format = '%linter%: %s'
+let g:ale_ruby_rubocop_executable = 'bundle'
 " Run RuboCop with Rails cops
 let g:ale_ruby_rubocop_options = '-R'
+let g:ale_elixir_elixir_ls_release = '/Users/nikita/.elixir/elixir-ls/rel'
+let g:ale_elixir_elixir_ls_config = {
+\   'elixirLS': {
+\     'dialyzerEnabled': v:false,
+\   },
+\ }
 " Map keys to navigate between lines with errors and warnings.
 nnoremap <leader>an :ALENextWrap<cr>
 nnoremap <leader>ap :ALEPreviousWrap<cr>
 
 " ================ deoplete ========================
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#max_list = 10
-let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['buffer', 'tag', 'around']
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#max_list = 10
+" let g:deoplete#sources = {}
+" let g:deoplete#sources._ = ['tabnine', 'buffer', 'tag', 'around']
+" call deoplete#custom#option({
+" \ 'smart_case': v:true,
+" \ 'max_list': 10,
+" \ 'sources': {
+" \   '_': ['tabnine', 'buffer', 'tag', 'around'],
+" \ }
+" \ })
+
 " enable tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
@@ -228,3 +255,6 @@ let g:alchemist_iex_term_size = 100
 
 " ================ vim-jedi ========================
 let g:jedi#force_py_version = 3
+
+" =================== neoterm ======================
+let g:neoterm_default_mod = 'botright'

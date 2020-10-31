@@ -31,8 +31,20 @@
 [user]
 	name       = Nikita Avvakumov
 	email      = nikitaavvakumov@gmail.com
-	signingkey = 3214257F4B9E0731
-# [init]
-# 	templatedir = ~/.git_template
+	signingkey = D6ED27213EB69D79
 [commit]
 	gpgsign = true
+[merge]
+  tool = code-insiders
+[mergetool "code-insiders"]
+  cmd = code-insiders -n --wait $MERGED
+[diff]
+  tool = code-insiders
+[difftool "code-insiders"]
+  cmd = code-insiders -n --wait --diff $LOCAL $REMOTE   
+[init]
+	templatedir = ~/.git_template
+[pull]
+	ff = only
+[fetch]
+	prune = true

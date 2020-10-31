@@ -121,6 +121,11 @@ function hideFiles() {
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias be='bundle exec'
+alias brc='source .env; bin/rails c'
+alias brs='source .env; bin/rails s'
+alias fs='source .env; foreman start'
+alias nspec='source .env; DISABLE_SPRING=true bin/rspec'
+
 alias brew_up='brew update && brew upgrade && brew cleanup'
 
 alias imix="iex -S mix"
@@ -128,8 +133,8 @@ alias mcc="mix clean && mix compile"
 alias mmigrate="mix ecto.migrate && mix ecto.rollback --step 1 && mix ecto.migrate"
 alias mpr="mix phx.routes"
 alias mps="export EMAIL_DELIVERY_ENABLED=true && iex -S mix phx.server"
-alias heroku_iex="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 iex -S mix'"
-alias heroku_mix_migrate="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 mix ecto.migrate'"
+alias heroku_iex="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 POOL_SIZE=2 iex -S mix'"
+alias heroku_mix_migrate="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 POOL_SIZE=2 mix ecto.migrate'"
 
 alias vim=nvim
 alias vzf='nvim $(fzf)'
@@ -137,6 +142,7 @@ alias cat=bat
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias top=htop
 alias gst_vim='vim -O $(gst -s | cut -c4-)'
+alias gfop='git fetch origin --prune'
 
 function mcd() {
   mkdir -p $1
@@ -157,12 +163,22 @@ function replace() {
   done
 }
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="$PATH:`yarn global bin`"
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/nikita/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/nikita/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/nikita/opt/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/nikita/opt/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
