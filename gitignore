@@ -15,3 +15,6 @@
 
 # VS Code config
 /.vscode/
+
+# ctags
+/tags

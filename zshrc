@@ -74,7 +74,7 @@ source $ZSH/oh-my-zsh.sh
 export ERL_AFLAGS="-kernel shell_history enabled"
 
 # fzf
-if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then 
+if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
   source /usr/local/opt/fzf/shell/key-bindings.zsh
   source /usr/local/opt/fzf/shell/completion.zsh
 fi
@@ -121,10 +121,10 @@ function hideFiles() {
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias be='bundle exec'
-alias brc='source .env; bin/rails c'
-alias brs='source .env; bin/rails s'
-alias fs='source .env; foreman start'
-alias nspec='source .env; DISABLE_SPRING=true bin/rspec'
+alias brc='bin/rails c'
+alias brs='bin/rails s'
+alias fs='foreman start'
+alias nspec='DISABLE_SPRING=true bin/rspec'
 
 alias brew_up='brew update && brew upgrade && brew cleanup'
 
@@ -137,12 +137,14 @@ alias heroku_iex="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 POOL_
 alias heroku_mix_migrate="heroku run 'POOL_SIZE_BACKOFFICE=2 POOL_SIZE_DATASTORE=2 POOL_SIZE=2 mix ecto.migrate'"
 
 alias vim=nvim
+alias nv='NVIM_RPLUGIN_MANIFEST=$HOME/.local/share/nvim-nightly/rplugin.vim VIMRUNTIME=$HOME/neovim/runtime $HOME/neovim/build/bin/nvim "$@" -u $HOME/.config/nvim-nightly/init.vim'
 alias vzf='nvim $(fzf)'
 alias cat=bat
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias top=htop
 alias gst_vim='vim -O $(gst -s | cut -c4-)'
 alias gfop='git fetch origin --prune'
+alias gl10='git log -10'
 
 function mcd() {
   mkdir -p $1
@@ -182,3 +184,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Unbreak gcloud / google-cloud-sdk after update on Nov 1, 2020
+export CLOUDSDK_PYTHON=python2

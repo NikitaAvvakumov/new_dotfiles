@@ -1,28 +1,27 @@
 call plug#begin('~/.vim/plugged')
 
+let g:ale_disable_lsp = 1
+
 " Appearance
-" Plug 'morhetz/gruvbox'
 Plug 'arcticicestudio/nord-vim'
+Plug 'vim-airline/vim-airline'
 
 " Syntax, completion & linting
 Plug 'cakebaker/scss-syntax.vim'
-Plug 'davidhalter/jedi-vim'
 Plug 'elixir-editors/vim-elixir'
 Plug 'mattn/emmet-vim'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
-Plug 'sheerun/vim-polyglot'
 Plug 'slashmili/alchemist.vim'
 Plug 'tpope/vim-rails'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'slim-template/vim-slim'
 
 " Improvements
-" Plug 'kassio/neoterm'
-Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dietsche/vim-lastplace'
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-surround'
@@ -31,14 +30,14 @@ Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'lilydjwg/colorizer', { 'for': ['css', 'sass', 'scss', 'less', 'html', 'xdefaults', 'javascript', 'javascript.jsx'] }
-Plug 'janko-m/vim-test'
+Plug 'vim-test/vim-test'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
+Plug 'APZelos/blamer.nvim'
 
 call plug#end()
 
 " ================== Appearance ======================
-" colorscheme gruvbox
 set termguicolors
 colorscheme nord
 set background=dark
@@ -94,7 +93,8 @@ set inccommand=nosplit "substitution preview in place
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
 
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+" command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+map <leader>/ :Ag<Cr>
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions by storing it in a file
@@ -177,12 +177,19 @@ nmap ]<Space> o<Esc>
 " search from selection in Normal mode
 vnoremap // y/<C-R>"<CR>
 
+"coc
+nmap <silent> gd <Plug>(coc-definition)
+" ESC will close floating windows sometimes left open by COC
+nmap <Esc> :call coc#float#close_all() <CR>
+
 " vim-test
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
 nmap <silent> <leader>a :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
+
+let g:blamer_enabled = 1
 
 let test#strategy = "neovim"
 
@@ -216,13 +223,12 @@ highlight clear ALEErrorSign " otherwise uses error bg color (typically red)
 highlight clear ALEWarningSign " otherwise uses error bg color (typically red)
 let g:ale_sign_error = '>>' " could use emoji
 let g:ale_sign_warning = '--' " could use emoji
+let g:airline#extensions#ale#enabled = 1
 let g:ale_statusline_format = ['X %d', '? %d', '']
 " %linter% is the name of the linter that provided the message
 " %s is the error or warning message
 let g:ale_echo_msg_format = '%linter%: %s'
 let g:ale_ruby_rubocop_executable = 'bundle'
-" Run RuboCop with Rails cops
-let g:ale_ruby_rubocop_options = '-R'
 let g:ale_elixir_elixir_ls_release = '/Users/nikita/.elixir/elixir-ls/rel'
 let g:ale_elixir_elixir_ls_config = {
 \   'elixirLS': {
@@ -233,28 +239,12 @@ let g:ale_elixir_elixir_ls_config = {
 nnoremap <leader>an :ALENextWrap<cr>
 nnoremap <leader>ap :ALEPreviousWrap<cr>
 
-" ================ deoplete ========================
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#max_list = 10
-" let g:deoplete#sources = {}
-" let g:deoplete#sources._ = ['tabnine', 'buffer', 'tag', 'around']
-" call deoplete#custom#option({
-" \ 'smart_case': v:true,
-" \ 'max_list': 10,
-" \ 'sources': {
-" \   '_': ['tabnine', 'buffer', 'tag', 'around'],
-" \ }
-" \ })
-
 " enable tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " ================ alchemist ========================
 let g:alchemist_iex_term_split = 'vsplit'
 let g:alchemist_iex_term_size = 100
-
-" ================ vim-jedi ========================
-let g:jedi#force_py_version = 3
 
 " =================== neoterm ======================
 let g:neoterm_default_mod = 'botright'
